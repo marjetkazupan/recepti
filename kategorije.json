@@ -1,0 +1,258 @@
+[
+    {
+        "tag": 10,
+        "kat": "Cocktail"
+    },
+    {
+        "tag": 11,
+        "kat": "Getränk"
+    },
+    {
+        "tag": 12,
+        "kat": "Longdrink"
+    },
+    {
+        "tag": 18,
+        "kat": "Gemüse"
+    },
+    {
+        "tag": 19,
+        "kat": "Vorspeise"
+    },
+    {
+        "tag": 20,
+        "kat": "kalt"
+    },
+    {
+        "tag": 26,
+        "kat": "Krustentier oder Muscheln"
+    },
+    {
+        "tag": 27,
+        "kat": "Sommer"
+    },
+    {
+        "tag": 28,
+        "kat": "Italien"
+    },
+    {
+        "tag": 29,
+        "kat": "Europa"
+    },
+    {
+        "tag": 32,
+        "kat": "Vegetarisch"
+    },
+    {
+        "tag": 38,
+        "kat": "USA oder Kanada"
+    },
+    {
+        "tag": 39,
+        "kat": "Halloween"
+    },
+    {
+        "tag": 43,
+        "kat": "Spanien"
+    },
+    {
+        "tag": 45,
+        "kat": "Party"
+    },
+    {
+        "tag": 48,
+        "kat": "raffiniert oder preiswert"
+    },
+    {
+        "tag": 49,
+        "kat": "Schnell"
+    },
+    {
+        "tag": 50,
+        "kat": "einfach"
+    },
+    {
+        "tag": 53,
+        "kat": "Frühstück"
+    },
+    {
+        "tag": 55,
+        "kat": "kalorienarm"
+    },
+    {
+        "tag": 56,
+        "kat": "fettarm"
+    },
+    {
+        "tag": 57,
+        "kat": "Vegan"
+    },
+    {
+        "tag": 60,
+        "kat": "Schweiz"
+    },
+    {
+        "tag": 64,
+        "kat": "Winter"
+    },
+    {
+        "tag": 65,
+        "kat": "Deutschland"
+    },
+    {
+        "tag": 72,
+        "kat": "Österreich"
+    },
+    {
+        "tag": 74,
+        "kat": "Mexiko"
+    },
+    {
+        "tag": 78,
+        "kat": "Frühling"
+    },
+    {
+        "tag": 84,
+        "kat": "Frankreich"
+    },
+    {
+        "tag": 86,
+        "kat": "Osteuropa"
+    },
+    {
+        "tag": 87,
+        "kat": "Silvester"
+    },
+    {
+        "tag": 90,
+        "kat": "Dessert"
+    },
+    {
+        "tag": 91,
+        "kat": "Kinder"
+    },
+    {
+        "tag": 95,
+        "kat": "Karibik und Exotik"
+    },
+    {
+        "tag": 99,
+        "kat": "Herbst"
+    },
+    {
+        "tag": 102,
+        "kat": "Weihnachten"
+    },
+    {
+        "tag": 104,
+        "kat": "Creme"
+    },
+    {
+        "tag": 106,
+        "kat": "Festlich"
+    },
+    {
+        "tag": 109,
+        "kat": "Frucht"
+    },
+    {
+        "tag": 110,
+        "kat": "Resteverwertung"
+    },
+    {
+        "tag": 112,
+        "kat": "Trennkost"
+    },
+    {
+        "tag": 113,
+        "kat": "Shake"
+    },
+    {
+        "tag": 114,
+        "kat": "Latein Amerika"
+    },
+    {
+        "tag": 115,
+        "kat": "Amerika"
+    },
+    {
+        "tag": 120,
+        "kat": "Ostern"
+    },
+    {
+        "tag": 121,
+        "kat": "Bowle"
+    },
+    {
+        "tag": 125,
+        "kat": "Polen"
+    },
+    {
+        "tag": 126,
+        "kat": "alkoholfrei"
+    },
+    {
+        "tag": 127,
+        "kat": "Eis"
+    },
+    {
+        "tag": 128,
+        "kat": "Flambieren"
+    },
+    {
+        "tag": 142,
+        "kat": "Punsch"
+    },
+    {
+        "tag": 144,
+        "kat": "gekocht"
+    },
+    {
+        "tag": 146,
+        "kat": "Geheimrezept"
+    },
+    {
+        "tag": 149,
+        "kat": "Portugal"
+    },
+    {
+        "tag": 150,
+        "kat": "Haltbarmachen"
+    },
+    {
+        "tag": 151,
+        "kat": "Likör"
+    },
+    {
+        "tag": 156,
+        "kat": "Kaffee Tee oder Kakao"
+    },
+    {
+        "tag": 158,
+        "kat": "Finnland"
+    },
+    {
+        "tag": 211,
+        "kat": "Studentenküche"
+    },
+    {
+        "tag": 1136,
+        "kat": "Molekularküche"
+    },
+    {
+        "tag": 5999,
+        "kat": "lateinamerika"
+    },
+    {
+        "tag": 6082,
+        "kat": "Ernährungskonzepte"
+    },
+    {
+        "tag": 9947,
+        "kat": "ketogen"
+    },
+    {
+        "tag": 9948,
+        "kat": "Low Carb"
+    }
+]

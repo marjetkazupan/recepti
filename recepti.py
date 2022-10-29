@@ -1,40 +1,80 @@
-import re, os, orodja
+import re, os, orodja, datetime
 
 
-STEVILO_STRANI = 30
+NUM_TAGS = 200
+STEVILO_STRANI = 25
+STRANI_DIR = 'recepti_spletne-strani_id'
 RECEPTI_DIR = 'recepti_spletne-strani'
 RECEPTI_JSON = 'recepti.json'
 RECEPTI_CSV = "recepti.csv"
 
 
+def pridobi_id(tag):
+    """Funkcija sprejme številko oznake in poišče id receptov, 
+    ki se nahajajo na spletni strani pod to oznako, ter vrne seznam."""
+    
+    # Pripravimmo si prazen seznam idjev in definiramo niz, s katerim je v htmlju predstavljen id
+    ids = set()
+    vzorec_id = r'data-vars-tracking-id="recipe-(.*?)" '
+    vzorec = re.compile(vzorec_id, flags=re.DOTALL)
 
-def poisci_recepte(vzorec_bloka, page_content):
-    """Funkcija poišče posamezne recepte, ki se nahajajo na spletni strani in vrne seznam receptov."""
-    vzorec = re.compile(vzorec_bloka, flags=re.DOTALL)
-    return re.findall(vzorec, page_content)
+    # Spletno stran shranimo v lokalno datoteko; če nas preusmeri na začetno stran, izvajanje funkcije prekinemo
+    # Ker želimo shraniti vseh 25 strani te kategorije, naredimo zanko
+    for i in range(STEVILO_STRANI):
+        url = f"https://www.chefkoch.de/rs/s{i}t{tag}/Rezepte.html"
+        path = os.path.join(STRANI_DIR, f"stran-{tag}-{i}.html")
+        res = orodja.shrani_spletno_stran(url, path, f"https://www.chefkoch.de/rs/s0/Rezepte.html")
+
+        # Preverimo, ali je shranjevanje uspelo
+        if not os.path.isfile(path) or res == 404:
+            return
+
+        # Iz lokalnih (html) datotek preberemo podatke
+        podatki_str = orodja.vsebina_datoteke(path)
+
+        # Med podatki poiščemo id receptov
+        id_n = set(re.findall(vzorec, podatki_str))
+        if  not id_n:
+            return ids
+        ids = ids.union(id_n)
+
+    return ids
 
 
-def izlusci_podatke(niz):
-    """Funkcija sprejme niz, ki predstavlja recept, in vrne slovar podatkov o receptu."""
-    rx = re.compile(r'id="recipe-(?P<id>.*?)" '
-                    r'data-vars-recipe-title="(?P<title>.*?)"'
-                    r'.*?data-vars-num-votes="(?P<num_votes>\d*?)" '
-                    r'data-vars-rating="(?P<rating>.*?)" data-vars-has-video="(\d)"'
-                    r'.*?<a href="(?P<url>.*?)"'
-                    r'.*?class="ds-recipe-info__text">(?P<time>\d*?) Min.<'
-                    r'.*?class="ds-recipe-info__text">(?P<difficulty>.*?)<',
-                    re.DOTALL)
-    data = re.search(rx, niz)
+def pridobi_podatke(recept, id):
+    rx = re.compile(
+        r'<h1 class="">(?P<title>.*?)</h1>.*?'
+        r'<span class="recipe-preptime rds-recipe-meta__badge"><i class="material-icons"></i>\s*(?P<time>.*?) Min.\s*?</span>\s*?'
+        r'<span class="recipe-difficulty rds-recipe-meta__badge"><i class="material-icons"></i>(?P<difficulty>.*?)</span>\s*?'
+        r'<span class="recipe-date rds-recipe-meta__badge"><i class="material-icons"></i>(?P<date>.*?)</span>.*?'
+        r'<table class="ingredients table-header" width="100%" cellspacing="0" cellpadding="0">(?P<sestavine>.*?)</table>.*?'
+        r'<div class="ds-box recipe-tags">(?P<category>.*?)</amp-carousel>',
+        re.DOTALL)
+    data = re.search(rx, recept)
     sl = data.groupdict()
 
-    # Če ima recept objavljen opis, dodamo še tega
-    opis_rx = re.compile(r'description ds-text-caption ds-trunc ds-trunc-2">(?P<info>.*?)</div> <!----> <!----> <!---->', re.DOTALL)
-    desc = re.search(opis_rx, niz)
-    if desc is not None:
-        sl['info'] = desc.group('info')
-    else:
-        sl['info'] = 'Unbekannt'
-    return sl
+
+    # Na začetek slovarja dodamo id recepta.
+    i = {'id': id}
+    s = {**i, **sl}
+
+    # Če ima recept objavljene naslednje podatke, dodamo še te.
+    rx_d = {
+        'calories': (r'<span class="recipe-kcalories rds-recipe-meta__badge"><i class="material-icons"></i>\s*(?P<calories>.*?) kcal\s*?</span>', 'Unbekannt'),
+        'info': (r'<p class="recipe-text ">(?P<info>.*?)</p>', 'Unbekannt'),
+        'num_comments': (r'<strong>(?P<num_comments>\d*?)</strong> Kommentar.*?', '0'),
+        'num_votes': (r'<div class="ds-rating-stars " title="(?P<num_votes>\d*?) Bewertung[en]*">.*?', '0'),
+        'rating': (r'<span class="ds-sr-only">Durchschnittliche Bewertung:</span>\s*?<strong>(?P<rating>.*?)</strong>.*?', '0')
+    }
+    for kljuc, (v1, v2) in rx_d.items():
+        r = re.compile(v1, re.DOTALL)
+        desc = re.search(r, recept)
+        if desc is not None:
+            s[kljuc] = desc.group(kljuc)
+        else:
+            s[kljuc] = v2
+
+    return s
 
 
 def uredi_tezavnost(t: str, id):
@@ -49,40 +89,103 @@ def uredi_tezavnost(t: str, id):
         return 'Unbekannt'
 
 
+def izloci_sestavine(recept):
+    vzorec_sestavine = re.compile(r'right\">\s*?<span>(<a.*?>)?(?P<sestavina>.*?)(</a>)?</span>')
+    sestavine = []
+    for sestavina in vzorec_sestavine.finditer(recept):
+        sestavine.append(
+            sestavina.groupdict()['sestavina']
+        )
+    return sestavine
+
+
+def izloci_kategorije(recept):
+    vzorec_kategorije = re.compile(r'href=\"/rs/s\d*?t(?P<tag>\d*).*?data-vars-search-term=\"(?P<kat>.*?)\">')
+    kategorije = []
+    for kategorija in vzorec_kategorije.finditer(recept):
+        kategorije.append({
+            'tag': int(kategorija.groupdict()['tag']),
+            'kat': kategorija.groupdict()['kat']
+        })
+    return kategorije
+
+
 def polepsaj_podatke(recept: dict):
     """Funkcija sprejme slovar, ki vsebuje podatke o receptu, in te spremeni v primerno obliko (tip)."""
-    recept['id'] = int(recept['id'])
-    recept['num_votes'] = int(recept['num_votes'])
-    recept['rating'] = float(recept['rating'])
-    recept['time'] = int(recept['time'])
-    recept['difficulty'] = uredi_tezavnost(recept['difficulty'], recept['id'])
+    recept['num_comments'] = int(recept['num_comments'].strip())
+    recept['num_votes'] = int(recept['num_votes'].strip())
+    recept['rating'] = float(recept['rating'].strip())
+    recept['time'] = int(recept['time'].strip())
+    recept['difficulty'] = uredi_tezavnost(recept['difficulty'].strip(), recept['id'])
+    datum = datetime.datetime.strptime(recept['date'].strip(), '%d.%m.%Y').date().isoformat()
+    recept['date'] = datum
+    recept['calories'] = (int(recept['calories']) if recept['calories'] != 'Unbekannt' else recept['calories'])
     recept['info'] = recept['info'].strip()
+
+    recept['sestavine'] = izloci_sestavine(recept['sestavine'])
+    recept['category'] = izloci_kategorije(recept['category'])
+
     return recept
 
 
+def izloci_gnezdene_podatke(recepti):
+    kategorije, rk, sestavine = [], [], []
+    videne_kategorije = set()
+
+    def dodaj_kat(recept, kategorija, mesto):
+        if kategorija['tag'] not in videne_kategorije:
+            videne_kategorije.add(kategorija['tag'])
+            kategorije.append(kategorija)
+        rk.append({
+            'recept': recept['id'],
+            'kategorija': kategorija['tag'],
+            'mesto': mesto
+        })
+
+    for recept in recepti:
+        for sestavina in recept.pop('sestavine'):
+            sestavine.append({'recept': recept['id'], 'sestavina': sestavina})
+        for mesto, kategorija in enumerate(recept.pop('category')):
+            dodaj_kat(recept, kategorija, mesto)
+
+    kategorije.sort(key=lambda kat: kat['tag'])
+    rk.sort(key=lambda p: (p['recept'], p['kategorija'], p['mesto']))
+    sestavine.sort(key=lambda q: (q['recept'], q['sestavina']))
+
+    return kategorije, rk, sestavine
+
+
 def preberi_podatke(i):
-    """Funkcija prebere podatke s spletne strani in jih shrani v seznam urejenih slovarjev.
-    Pri tem vsak slovaer predstavlja en recept."""
+    """Funkcija sprejme id recepta in prebere podatke o njem s spletne strani ter jih doda v seznam urejenih slovarjev.
+    Pri tem vsak slovar predstavlja en recept."""
 
     # Najprej spletno stran shranimo v lokalno datoteko
-    url = f"https://www.chefkoch.de/rs/s{i}/Rezepte.html"
-    path = os.path.join(RECEPTI_DIR, f"stran-{i}.html")
-    orodja.shrani_spletno_stran(url, path)
+    url = f"https://www.chefkoch.de/rezepte/{i}"
+    path = os.path.join(RECEPTI_DIR, f"recept-{i}.html")
+    res = orodja.shrani_spletno_stran(url, path)
 
     # Preverimo, ali je shranjevanje uspelo
-    if not os.path.isfile(path):
+    if not os.path.isfile(path) or res == 404:
         return
 
     # Iz lokalnih (html) datotek preberemo podatke
     podatki_str = orodja.vsebina_datoteke(path)
 
-    # Med podatki poiščemo bloke z recepti
-    vzorec_bloka = r'<div data-vars-position="\d*" data-vars-tracking-(.*?)<\/a>'
-    podatki = poisci_recepte(vzorec_bloka, podatki_str)
+    # Med podatki poiščemo podatke o receptu
+    podatki = pridobi_podatke(podatki_str, i)
 
     # Podatke prevedemo v lepšo obliko (seznam slovarjev)
-    lepsi_podatki = [polepsaj_podatke(izlusci_podatke(recept)) for recept in podatki]
+    lepsi_podatki = polepsaj_podatke(podatki)
     return lepsi_podatki
+
+
+def id_gen(i):
+    tag = 10
+    while tag < i + 10:
+        p = pridobi_id(tag)
+        if p:
+            yield p
+        tag += 1
 
 
 def main(i, redownload=True, reparse=True):
@@ -92,26 +195,34 @@ def main(i, redownload=True, reparse=True):
     3. Podatke shrani v csv datoteko
     """
 
-    # Najprej preberemo podatke za vsako spletno stran posebej
+
+    # Najprej preberemo podatke za vsako spletno stran z receptom posebej
     recepti = []
-    for j in range(i):
-        p = preberi_podatke(j)
-        if p:
-            recepti += p
+    for t in id_gen(i):
+        recepti += [preberi_podatke(id) for id in t]
+    recepti.sort(key=lambda recept: recept['id'])
 
+    # Izločimo gnezdene podatke
+    kategorije, rk, sestavine = izloci_gnezdene_podatke(recepti)
 
-    # Podatke shranimo v json datoteko
+    # Podatke shranimo v json datoteke
     orodja.zapisi_json(
         recepti,
         RECEPTI_JSON
     )
+    orodja.zapisi_json(kategorije, 'kategorije.json')
+    orodja.zapisi_json(rk, 'rk.json')
+    orodja.zapisi_json(sestavine, 'sestavine.json')
 
-    # Podatke shranimo v csv datoteko
+    # Podatke shranimo v csv datoteke
     orodja.zapisi_csv(
         recepti,
-        ['id', 'title', 'num_votes', 'rating', 'url', 'time', 'difficulty', 'info'],
+        ['id', 'title', 'info', 'num_comments', 'num_votes', 'rating', 'time', 'difficulty', 'date', 'calories'],
         RECEPTI_CSV)
+    orodja.zapisi_csv(kategorije, ['tag', 'kat'], 'kategorije.csv')
+    orodja.zapisi_csv(rk, ['recept', 'kategorija', 'mesto'], 'rk.csv')
+    orodja.zapisi_csv(sestavine, ['recept', 'sestavina'], 'sestavine.csv')
 
 
 
-main(STEVILO_STRANI)
+main(NUM_TAGS)
