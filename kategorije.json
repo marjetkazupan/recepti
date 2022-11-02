@@ -12,6 +12,22 @@
         "kat": "Longdrink"
     },
     {
+        "tag": 13,
+        "kat": "Indien"
+    },
+    {
+        "tag": 14,
+        "kat": "Asien"
+    },
+    {
+        "tag": 15,
+        "kat": "Salat"
+    },
+    {
+        "tag": 16,
+        "kat": "Fleisch"
+    },
+    {
         "tag": 18,
         "kat": "Gemüse"
     },
@@ -22,6 +38,26 @@
     {
         "tag": 20,
         "kat": "kalt"
+    },
+    {
+        "tag": 21,
+        "kat": "Hauptspeise"
+    },
+    {
+        "tag": 22,
+        "kat": "Rind"
+    },
+    {
+        "tag": 23,
+        "kat": "Backen"
+    },
+    {
+        "tag": 24,
+        "kat": "Nudeln"
+    },
+    {
+        "tag": 25,
+        "kat": "Krustentier oder Fisch"
     },
     {
         "tag": 26,
@@ -40,8 +76,32 @@
         "kat": "Europa"
     },
     {
+        "tag": 30,
+        "kat": "Auflauf"
+    },
+    {
+        "tag": 31,
+        "kat": "Pasta"
+    },
+    {
         "tag": 32,
         "kat": "Vegetarisch"
+    },
+    {
+        "tag": 34,
+        "kat": "Saucen"
+    },
+    {
+        "tag": 35,
+        "kat": "Dips"
+    },
+    {
+        "tag": 36,
+        "kat": "Beilage"
+    },
+    {
+        "tag": 37,
+        "kat": "Reis"
     },
     {
         "tag": 38,
@@ -52,12 +112,36 @@
         "kat": "Halloween"
     },
     {
+        "tag": 40,
+        "kat": "Suppe"
+    },
+    {
+        "tag": 41,
+        "kat": "spezial"
+    },
+    {
+        "tag": 42,
+        "kat": "warm"
+    },
+    {
         "tag": 43,
         "kat": "Spanien"
     },
     {
+        "tag": 44,
+        "kat": "Griechenland"
+    },
+    {
         "tag": 45,
         "kat": "Party"
+    },
+    {
+        "tag": 46,
+        "kat": "Brotspeise"
+    },
+    {
+        "tag": 47,
+        "kat": "gebunden"
     },
     {
         "tag": 48,
@@ -72,8 +156,20 @@
         "kat": "einfach"
     },
     {
+        "tag": 51,
+        "kat": "Aufstrich"
+    },
+    {
+        "tag": 52,
+        "kat": "Fingerfood"
+    },
+    {
         "tag": 53,
         "kat": "Frühstück"
+    },
+    {
+        "tag": 54,
+        "kat": "klar"
     },
     {
         "tag": 55,
@@ -88,8 +184,28 @@
         "kat": "Vegan"
     },
     {
+        "tag": 58,
+        "kat": "Geflügel"
+    },
+    {
+        "tag": 59,
+        "kat": "Schwein"
+    },
+    {
         "tag": 60,
         "kat": "Schweiz"
+    },
+    {
+        "tag": 61,
+        "kat": "Fisch"
+    },
+    {
+        "tag": 62,
+        "kat": "Fondue"
+    },
+    {
+        "tag": 63,
+        "kat": "Grillen"
     },
     {
         "tag": 64,
@@ -100,20 +216,80 @@
         "kat": "Deutschland"
     },
     {
+        "tag": 66,
+        "kat": "Schmoren"
+    },
+    {
+        "tag": 67,
+        "kat": "Wild"
+    },
+    {
+        "tag": 68,
+        "kat": "Kartoffel"
+    },
+    {
+        "tag": 69,
+        "kat": "Braten"
+    },
+    {
+        "tag": 71,
+        "kat": "Snack"
+    },
+    {
         "tag": 72,
         "kat": "Österreich"
+    },
+    {
+        "tag": 73,
+        "kat": "Innereien"
     },
     {
         "tag": 74,
         "kat": "Mexiko"
     },
     {
+        "tag": 75,
+        "kat": "Lamm oder Ziege"
+    },
+    {
+        "tag": 76,
+        "kat": "China"
+    },
+    {
+        "tag": 77,
+        "kat": "Früchte"
+    },
+    {
         "tag": 78,
         "kat": "Frühling"
     },
     {
+        "tag": 79,
+        "kat": "Basisrezepte"
+    },
+    {
+        "tag": 80,
+        "kat": "Meeresfrüchte"
+    },
+    {
+        "tag": 81,
+        "kat": "Eintopf"
+    },
+    {
+        "tag": 82,
+        "kat": "Pizza"
+    },
+    {
+        "tag": 83,
+        "kat": "Käse"
+    },
+    {
         "tag": 84,
         "kat": "Frankreich"
+    },
+    {
+        "tag": 85,
+        "kat": "Ungarn"
     },
     {
         "tag": 86,
@@ -124,6 +300,10 @@
         "kat": "Silvester"
     },
     {
+        "tag": 89,
+        "kat": "Süßspeise"
+    },
+    {
         "tag": 90,
         "kat": "Dessert"
     },
@@ -132,24 +312,72 @@
         "kat": "Kinder"
     },
     {
+        "tag": 92,
+        "kat": "Kuchen"
+    },
+    {
+        "tag": 93,
+        "kat": "Torte"
+    },
+    {
+        "tag": 94,
+        "kat": "Reis- oder Nudelsalat"
+    },
+    {
         "tag": 95,
         "kat": "Karibik und Exotik"
+    },
+    {
+        "tag": 96,
+        "kat": "Weißrussland"
+    },
+    {
+        "tag": 97,
+        "kat": "Tschechien"
+    },
+    {
+        "tag": 98,
+        "kat": "Eier"
     },
     {
         "tag": 99,
         "kat": "Herbst"
     },
     {
+        "tag": 100,
+        "kat": "Mehlspeisen"
+    },
+    {
+        "tag": 101,
+        "kat": "Afrika"
+    },
+    {
         "tag": 102,
         "kat": "Weihnachten"
+    },
+    {
+        "tag": 103,
+        "kat": "Türkei"
     },
     {
         "tag": 104,
         "kat": "Creme"
     },
     {
+        "tag": 105,
+        "kat": "Diabetiker"
+    },
+    {
         "tag": 106,
         "kat": "Festlich"
+    },
+    {
+        "tag": 107,
+        "kat": "Dünsten"
+    },
+    {
+        "tag": 108,
+        "kat": "Brot oder Brötchen"
     },
     {
         "tag": 109,
@@ -158,6 +386,10 @@
     {
         "tag": 110,
         "kat": "Resteverwertung"
+    },
+    {
+        "tag": 111,
+        "kat": "Babynahrung"
     },
     {
         "tag": 112,
@@ -176,12 +408,32 @@
         "kat": "Amerika"
     },
     {
+        "tag": 116,
+        "kat": "Wok"
+    },
+    {
+        "tag": 117,
+        "kat": "Großbritannien"
+    },
+    {
         "tag": 120,
         "kat": "Ostern"
     },
     {
         "tag": 121,
         "kat": "Bowle"
+    },
+    {
+        "tag": 122,
+        "kat": "Tarte"
+    },
+    {
+        "tag": 123,
+        "kat": "Thailand"
+    },
+    {
+        "tag": 124,
+        "kat": "Eier oder Käse"
     },
     {
         "tag": 125,
@@ -200,16 +452,80 @@
         "kat": "Flambieren"
     },
     {
+        "tag": 130,
+        "kat": "Dänemark"
+    },
+    {
+        "tag": 131,
+        "kat": "Marokko"
+    },
+    {
+        "tag": 132,
+        "kat": "Schweden"
+    },
+    {
+        "tag": 133,
+        "kat": "Skandinavien"
+    },
+    {
+        "tag": 134,
+        "kat": "Frittieren"
+    },
+    {
+        "tag": 135,
+        "kat": "Mikrowelle"
+    },
+    {
+        "tag": 136,
+        "kat": "marinieren"
+    },
+    {
+        "tag": 137,
+        "kat": "Überbacken"
+    },
+    {
+        "tag": 138,
+        "kat": "Kartoffeln"
+    },
+    {
+        "tag": 139,
+        "kat": "Wildgeflügel"
+    },
+    {
+        "tag": 140,
+        "kat": "Pilze"
+    },
+    {
+        "tag": 141,
+        "kat": "cross-cooking"
+    },
+    {
         "tag": 142,
         "kat": "Punsch"
+    },
+    {
+        "tag": 143,
+        "kat": "Vollwert"
     },
     {
         "tag": 144,
         "kat": "gekocht"
     },
     {
+        "tag": 145,
+        "kat": "Australien"
+    },
+    {
         "tag": 146,
         "kat": "Geheimrezept"
+    },
+    {
+        "tag": 147,
+        "kat": "Kekse"
+    },
+    {
+        "tag": 148,
+        "kat": "Japan"
     },
     {
         "tag": 149,
@@ -224,20 +540,148 @@
         "kat": "Likör"
     },
     {
+        "tag": 152,
+        "kat": "Camping"
+    },
+    {
+        "tag": 153,
+        "kat": "Blanchieren"
+    },
+    {
+        "tag": 155,
+        "kat": "Ei"
+    },
+    {
         "tag": 156,
         "kat": "Kaffee Tee oder Kakao"
+    },
+    {
+        "tag": 157,
+        "kat": "Konfiserie"
     },
     {
         "tag": 158,
         "kat": "Finnland"
     },
     {
+        "tag": 159,
+        "kat": "Einlagen"
+    },
+    {
+        "tag": 160,
+        "kat": "Norwegen"
+    },
+    {
+        "tag": 162,
+        "kat": "Römertopf"
+    },
+    {
+        "tag": 163,
+        "kat": "Mittlerer- und Naher Osten"
+    },
+    {
+        "tag": 164,
+        "kat": "Südafrika"
+    },
+    {
+        "tag": 165,
+        "kat": "Hülsenfrüchte"
+    },
+    {
+        "tag": 166,
+        "kat": "Klöße"
+    },
+    {
+        "tag": 168,
+        "kat": "Ägypten"
+    },
+    {
+        "tag": 169,
+        "kat": "Vietnam"
+    },
+    {
         "tag": 211,
         "kat": "Studentenküche"
     },
     {
+        "tag": 212,
+        "kat": "Russland"
+    },
+    {
+        "tag": 243,
+        "kat": "Pasten"
+    },
+    {
+        "tag": 245,
+        "kat": "öl"
+    },
+    {
+        "tag": 252,
+        "kat": "tee"
+    },
+    {
+        "tag": 275,
+        "kat": "kaffee"
+    },
+    {
+        "tag": 313,
+        "kat": "gewürze"
+    },
+    {
+        "tag": 581,
+        "kat": "neu"
+    },
+    {
+        "tag": 1076,
+        "kat": "Niederlande"
+    },
+    {
         "tag": 1136,
         "kat": "Molekularküche"
+    },
+    {
+        "tag": 1147,
+        "kat": "Wursten"
+    },
+    {
+        "tag": 1456,
+        "kat": "Essig"
+    },
+    {
+        "tag": 1605,
+        "kat": "Gluten"
+    },
+    {
+        "tag": 1609,
+        "kat": "Getreide"
+    },
+    {
+        "tag": 1701,
+        "kat": "Kakao"
+    },
+    {
+        "tag": 2678,
+        "kat": "Korea"
+    },
+    {
+        "tag": 3669,
+        "kat": "Salatdressing"
+    },
+    {
+        "tag": 3817,
+        "kat": "Grundrezepte"
+    },
+    {
+        "tag": 3818,
+        "kat": "ReisGetreide"
+    },
+    {
+        "tag": 3828,
+        "kat": "Gewürze Öl Essig Pasten"
+    },
+    {
+        "tag": 4123,
+        "kat": "Lactose"
     },
     {
         "tag": 5999,
@@ -248,11 +692,23 @@
         "kat": "Ernährungskonzepte"
     },
     {
+        "tag": 7346,
+        "kat": "INFORM-Empfehlung"
+    },
+    {
+        "tag": 7710,
+        "kat": "Paleo"
+    },
+    {
         "tag": 9947,
         "kat": "ketogen"
     },
     {
         "tag": 9948,
         "kat": "Low Carb"
+    },
+    {
+        "tag": 9949,
+        "kat": "klare Suppe"
     }
 ]
