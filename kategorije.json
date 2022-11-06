@@ -300,6 +300,10 @@
         "kat": "Silvester"
     },
     {
+        "tag": 88,
+        "kat": "Backen oder Süßspeise"
+    },
+    {
         "tag": 89,
         "kat": "Süßspeise"
     },
@@ -548,6 +552,10 @@
         "kat": "Blanchieren"
     },
     {
+        "tag": 154,
+        "kat": "Belgien"
+    },
+    {
         "tag": 155,
         "kat": "Ei"
     },
@@ -572,6 +580,10 @@
         "kat": "Norwegen"
     },
     {
+        "tag": 161,
+        "kat": "Luxemburg"
+    },
+    {
         "tag": 162,
         "kat": "Römertopf"
     },
@@ -590,6 +602,10 @@
     {
         "tag": 166,
         "kat": "Klöße"
+    },
+    {
+        "tag": 167,
+        "kat": "Malta"
     },
     {
         "tag": 168,

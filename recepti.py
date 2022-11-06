@@ -1,19 +1,26 @@
 import re, os, orodja, datetime
 
 
-NUM_TAGS = 10
+TAG_START = 10
+NUM_TAGS = 50
 STEVILO_STRANI = 25
 STRANI_DIR = 'recepti_spletne-strani_id'
 RECEPTI_DIR = 'recepti_spletne-strani'
 RECEPTI_JSON = 'recepti.json'
-RECEPTI_CSV = "recepti.csv"
+KATEGORIJE_JSON = 'kategorije.json'
+RK_JSON = 'rk.json'
+SESTAVINE_JSON = 'sestavine.json'
+RECEPTI_CSV = 'recepti.csv'
+KATEGORIJE_CSV = 'kategorije.csv'
+RK_CSV = 'rk.csv'
+SESTAVINE_CSV = 'sestavine.csv'
 
 
 def pridobi_id(tag):
     """Funkcija sprejme številko oznake in poišče id receptov, 
-    ki se nahajajo na spletni strani pod to oznako, ter vrne seznam."""
+    ki se nahajajo na spletni strani pod to oznako, ter vrne množico idjev."""
     
-    # Pripravimmo si prazen seznam idjev in definiramo niz, s katerim je v htmlju predstavljen id
+    # Pripravimmo si prazeno množico idjev in definiramo niz, s katerim je v htmlju predstavljen id
     ids = set()
     vzorec_id = r'data-vars-tracking-id="recipe-(.*?)" '
     vzorec = re.compile(vzorec_id, flags=re.DOTALL)
@@ -47,7 +54,7 @@ def pridobi_podatke(recept, id):
         r'<span class="recipe-preptime rds-recipe-meta__badge"><i class="material-icons"></i>\s*(?P<time>.*?) Min.\s*?</span>\s*?'
         r'<span class="recipe-difficulty rds-recipe-meta__badge"><i class="material-icons"></i>(?P<difficulty>.*?)</span>\s*?'
         r'<span class="recipe-date rds-recipe-meta__badge"><i class="material-icons"></i>(?P<date>.*?)</span>.*?'
-        r'<table class="ingredients table-header" width="100%" cellspacing="0" cellpadding="0">(?P<sestavine>.*?)</table>.*?'
+        r'<table class="ingredients table-header" width="100%" cellspacing="0" cellpadding="0">(?P<sestavine>.*?)</table>\s*?<div>\s*?<div class.*?'
         r'<div class="ds-box recipe-tags">(?P<category>.*?)</amp-carousel>',
         re.DOTALL)
     data = re.search(rx, recept)
@@ -60,8 +67,8 @@ def pridobi_podatke(recept, id):
 
     # Če ima recept objavljene naslednje podatke, dodamo še te.
     rx_d = {
-        'calories': (r'<span class="recipe-kcalories rds-recipe-meta__badge"><i class="material-icons"></i>\s*(?P<calories>.*?) kcal\s*?</span>', 'Unbekannt'),
-        'info': (r'<p class="recipe-text ">(?P<info>.*?)</p>', 'Unbekannt'),
+        'calories': (r'<span class="recipe-kcalories rds-recipe-meta__badge"><i class="material-icons"></i>\s*(?P<calories>.*?) kcal\s*?</span>', ''),
+        'info': (r'<p class="recipe-text ">(?P<info>.*?)</p>', ''),
         'num_comments': (r'<strong>(?P<num_comments>\d*?)</strong> Kommentar.*?', '0'),
         'num_votes': (r'<div class="ds-rating-count">\s*<span>.*?<span>(?P<num_votes>\d*)</span>.*?', '0'),
         'rating': (r'<span class="ds-sr-only">Durchschnittliche Bewertung:</span>\s*?<strong>(?P<rating>.*?)</strong>.*?', '0')
@@ -86,16 +93,12 @@ def uredi_tezavnost(t: str, id):
         return 2
     else:
         print(f'Prišlo je do napake pri težavnosti recepta {id}. Vnešena vrednost: {t}')
-        return 'Unbekannt'
+        return ''
 
 
 def izloci_sestavine(recept):
     vzorec_sestavine = re.compile(r'right\">\s*?<span>(<a.*?>)?(?P<sestavina>.*?)(</a>)?</span>')
-    sestavine = []
-    for sestavina in vzorec_sestavine.finditer(recept):
-        sestavine.append(
-            sestavina.groupdict()['sestavina']
-        )
+    sestavine = [sestavina.group('sestavina') for sestavina in vzorec_sestavine.finditer(recept)]
     return sestavine
 
 
@@ -114,12 +117,12 @@ def polepsaj_podatke(recept: dict):
     """Funkcija sprejme slovar, ki vsebuje podatke o receptu, in te spremeni v primerno obliko (tip)."""
     recept['num_comments'] = int(recept['num_comments'].strip())
     recept['num_votes'] = int(recept['num_votes'].strip())
-    recept['rating'] = float(recept['rating'].strip())
+    recept['rating'] = (float(recept['rating'].strip()) if recept['rating'] != '0' else '')
     recept['time'] = int(recept['time'].strip())
     recept['difficulty'] = uredi_tezavnost(recept['difficulty'].strip(), recept['id'])
     datum = datetime.datetime.strptime(recept['date'].strip(), '%d.%m.%Y').date().isoformat()
     recept['date'] = datum
-    recept['calories'] = (int(recept['calories']) if recept['calories'] != 'Unbekannt' else recept['calories'])
+    recept['calories'] = (int(recept['calories']) if recept['calories'] != '' else recept['calories'])
     recept['info'] = recept['info'].strip()
 
     recept['sestavine'] = izloci_sestavine(recept['sestavine'])
@@ -132,24 +135,23 @@ def izloci_gnezdene_podatke(recepti):
     kategorije, rk, sestavine = [], [], []
     videne_kategorije = set()
 
-    def dodaj_kat(recept, kategorija, mesto):
+    def dodaj_kat(recept, kategorija):
         if kategorija['tag'] not in videne_kategorije:
             videne_kategorije.add(kategorija['tag'])
             kategorije.append(kategorija)
         rk.append({
             'recept': recept['id'],
-            'kategorija': kategorija['tag'],
-            'mesto': mesto
+            'kategorija': kategorija['tag']
         })
 
     for recept in recepti:
         for sestavina in recept.pop('sestavine'):
             sestavine.append({'recept': recept['id'], 'sestavina': sestavina})
-        for mesto, kategorija in enumerate(recept.pop('category')):
-            dodaj_kat(recept, kategorija, mesto)
+        for kategorija in recept.pop('category'):
+            dodaj_kat(recept, kategorija)
 
     kategorije.sort(key=lambda kat: kat['tag'])
-    rk.sort(key=lambda p: (p['recept'], p['kategorija'], p['mesto']))
+    rk.sort(key=lambda p: (p['recept'], p['kategorija']))
     sestavine.sort(key=lambda q: (q['recept'], q['sestavina']))
 
     return kategorije, rk, sestavine
@@ -180,8 +182,8 @@ def preberi_podatke(i):
 
 
 def id_gen(i):
-    tag = 10
-    while tag < i + 10:
+    tag = TAG_START
+    while tag < i + TAG_START:
         p = pridobi_id(tag)
         if p:
             yield p
@@ -198,8 +200,13 @@ def main(i, redownload=True, reparse=True):
 
     # Najprej preberemo podatke za vsako spletno stran z receptom posebej
     recepti = []
+    recepti_id = set()
     for t in id_gen(i):
-        recepti += [preberi_podatke(id) for id in t]
+        for id in t:
+            if id not in recepti_id:
+                recepti_id.add(id)
+                novo = preberi_podatke(id)
+                recepti.append(novo)
     recepti.sort(key=lambda recept: recept['id'])
 
     # Izločimo gnezdene podatke
@@ -210,18 +217,18 @@ def main(i, redownload=True, reparse=True):
         recepti,
         RECEPTI_JSON
     )
-    orodja.zapisi_json(kategorije, 'kategorije.json')
-    orodja.zapisi_json(rk, 'rk.json')
-    orodja.zapisi_json(sestavine, 'sestavine.json')
+    orodja.zapisi_json(kategorije, KATEGORIJE_JSON)
+    orodja.zapisi_json(rk, RK_JSON)
+    orodja.zapisi_json(sestavine, SESTAVINE_JSON)
 
     # Podatke shranimo v csv datoteke
     orodja.zapisi_csv(
         recepti,
         ['id', 'title', 'info', 'num_comments', 'num_votes', 'rating', 'time', 'difficulty', 'date', 'calories'],
         RECEPTI_CSV)
-    orodja.zapisi_csv(kategorije, ['tag', 'kat'], 'kategorije.csv')
-    orodja.zapisi_csv(rk, ['recept', 'kategorija', 'mesto'], 'rk.csv')
-    orodja.zapisi_csv(sestavine, ['recept', 'sestavina'], 'sestavine.csv')
+    orodja.zapisi_csv(kategorije, ['tag', 'kat'], KATEGORIJE_CSV)
+    orodja.zapisi_csv(rk, ['recept', 'kategorija'], RK_CSV)
+    orodja.zapisi_csv(sestavine, ['recept', 'sestavina'], SESTAVINE_CSV)
 
 
 
