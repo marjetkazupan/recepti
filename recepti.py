@@ -69,8 +69,8 @@ def pridobi_podatke(recept, id):
     rx_d = {
         'calories': (r'<span class="recipe-kcalories rds-recipe-meta__badge"><i class="material-icons"></i>\s*(?P<calories>.*?) kcal\s*?</span>', ''),
         'info': (r'<p class="recipe-text ">(?P<info>.*?)</p>', ''),
-        'num_comments': (r'<strong>(?P<num_comments>\d*?)</strong> Kommentar.*?', '0'),
-        'num_votes': (r'<div class="ds-rating-count">\s*<span>.*?<span>(?P<num_votes>\d*)</span>.*?', '0'),
+        'num_comments': (r'<strong>(?P<num_comments>[\d|\.]*)</strong> Kommentar.*?', '0'),
+        'num_votes': (r'<div class="ds-rating-count">\s*<span>.*?<span>(?P<num_votes>[\d|\.]*)</span>.*?', '0'),
         'rating': (r'<span class="ds-sr-only">Durchschnittliche Bewertung:</span>\s*?<strong>(?P<rating>.*?)</strong>.*?', '0')
     }
     for kljuc, (v1, v2) in rx_d.items():
