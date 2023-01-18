@@ -16,7 +16,6 @@ Za vsak recept bom zajela:
 
 Pri obdelavi se bom osredotočila na naslednja vprašanja:
 - Ali obstaja povezava med sestavinami in oceno recepta? So katere sestavine pri uporabnikih bolj priljubljene od ostalih?
-- Katera kategorija jedi je najzahtevnejša za pripravo?
 - So novejši recepti bolje ali slabše ocenjeni?
 - Je čas priprave povezan s težavnostjo?
 
