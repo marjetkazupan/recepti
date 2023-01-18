@@ -1,8 +1,8 @@
 import re, os, orodja, datetime
 
 
-TAG_START = 10
-NUM_TAGS = 50
+TAG_START = 0
+NUM_TAGS = 150
 STEVILO_STRANI = 25
 STRANI_DIR = 'recepti_spletne-strani_id'
 RECEPTI_DIR = 'recepti_spletne-strani'
@@ -20,7 +20,7 @@ def pridobi_id(tag):
     """Funkcija sprejme številko oznake in poišče id receptov, 
     ki se nahajajo na spletni strani pod to oznako, ter vrne množico idjev."""
     
-    # Pripravimmo si prazeno množico idjev in definiramo niz, s katerim je v htmlju predstavljen id
+    # Pripravimmo si prazno množico idjev in definiramo niz, s katerim je v htmlju predstavljen id
     ids = set()
     vzorec_id = r'data-vars-tracking-id="recipe-(.*?)" '
     vzorec = re.compile(vzorec_id, flags=re.DOTALL)
@@ -58,6 +58,9 @@ def pridobi_podatke(recept, id):
         r'<div class="ds-box recipe-tags">(?P<category>.*?)</amp-carousel>',
         re.DOTALL)
     data = re.search(rx, recept)
+    if data == None:
+        print(f'\n\n\nNapaka pri pridobivanju podatkov o receptu {id}.\n\n\n')
+        return
     sl = data.groupdict()
 
 
@@ -115,8 +118,8 @@ def izloci_kategorije(recept):
 
 def polepsaj_podatke(recept: dict):
     """Funkcija sprejme slovar, ki vsebuje podatke o receptu, in te spremeni v primerno obliko (tip)."""
-    recept['num_comments'] = int(recept['num_comments'].strip())
-    recept['num_votes'] = int(recept['num_votes'].strip())
+    recept['num_comments'] = int(recept['num_comments'].strip().replace('.', ''))
+    recept['num_votes'] = int(recept['num_votes'].strip().replace('.', ''))
     recept['rating'] = (float(recept['rating'].strip()) if recept['rating'] != '0' else '')
     recept['time'] = int(recept['time'].strip())
     recept['difficulty'] = uredi_tezavnost(recept['difficulty'].strip(), recept['id'])
@@ -176,9 +179,10 @@ def preberi_podatke(i):
     # Med podatki poiščemo podatke o receptu
     podatki = pridobi_podatke(podatki_str, i)
 
-    # Podatke prevedemo v lepšo obliko (seznam slovarjev)
-    lepsi_podatki = polepsaj_podatke(podatki)
-    return lepsi_podatki
+    # Podatke prevedemo v lepšo obliko (seznam slovarjev); če podatkov ni, vrnemo None
+    if podatki:
+        lepsi_podatki = polepsaj_podatke(podatki)
+        return lepsi_podatki
 
 
 def id_gen(i):
@@ -198,15 +202,20 @@ def main(i, redownload=True, reparse=True):
     """
 
 
-    # Najprej preberemo podatke za vsako spletno stran z receptom posebej
+    # Najprej preberemo podatke za vsako spletno stran z receptom posebej. 
+    # id strani, pri katerih pride do napake, si shranimo, da lahko napake kasneje odpravimo.
     recepti = []
+    napake = set()
     recepti_id = set()
     for t in id_gen(i):
         for id in t:
             if id not in recepti_id:
                 recepti_id.add(id)
                 novo = preberi_podatke(id)
-                recepti.append(novo)
+                if novo:
+                    recepti.append(novo)
+                else:
+                    napake.add(id)
     recepti.sort(key=lambda recept: recept['id'])
 
     # Izločimo gnezdene podatke
@@ -229,6 +238,7 @@ def main(i, redownload=True, reparse=True):
     orodja.zapisi_csv(kategorije, ['tag', 'kat'], KATEGORIJE_CSV)
     orodja.zapisi_csv(rk, ['recept', 'kategorija'], RK_CSV)
     orodja.zapisi_csv(sestavine, ['recept', 'sestavina'], SESTAVINE_CSV)
+    return napake
 
 
 
