@@ -7,12 +7,13 @@ V projektni nalogi bom s spletne strani [Chefkoch](https://www.chefkoch.de/rs/s0
 Za vsak recept bom zajela:
 - ime jedi
 - opis
-- čas priprave in čas kuhanja/pečenja ter skupen čas priprave jedi
+- skupen čas priprave jedi
 - težavnost priprave jedi
 - sestavine
 - datum objave recepta
 - oceno recepta, število glasov in komentarjev
 - kategorije, v katere spada recept
+- kalorično vrednost jedi
 
 Pri obdelavi se bom osredotočila na naslednja vprašanja:
 - Ali obstaja povezava med sestavinami in oceno recepta? So katere sestavine pri uporabnikih bolj priljubljene od ostalih?
