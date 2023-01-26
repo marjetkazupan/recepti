@@ -20,3 +20,4 @@ Pri obdelavi se bom osredotočila na naslednja vprašanja:
 - So novejši recepti bolje ali slabše ocenjeni?
 - Je čas priprave povezan s težavnostjo?
 
+Podatke bom zbrala v štirih csv datotekah - recepti, kategorije, rk in sestavine. V datoteki recepti se nahajajo splošni podatki o receptih, v datotekah rk in sestavine sta legendi, ki recepte povežeta s pripradajočimi kategorijami oz. sestavinami, v datoteki kategorije pa legenda, ki pove ime kategorije, ki se v tabeli rk nahaja pod šifro.
